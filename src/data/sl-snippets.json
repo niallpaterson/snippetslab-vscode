@@ -1,0 +1,552 @@
+{
+  "Library Name" : "main.snippetslablibrary",
+  "Date Exported" : "2022-05-13 16:12:14 +0100",
+  "Snippets Count" : "27",
+  "Snippets" : [
+    {
+      "Date Created" : "2022-03-06 22:21:38 +0000",
+      "Date Modified" : "2022-03-08 09:54:20 +0000",
+      "Folder" : "Components",
+      "Title" : "Fallback",
+      "Fragments" : [
+        {
+          "Content" : "import * as React from 'react';\nimport {\n\tEmptyComponent,\n\tLoadingComponent,\n\tErrorComponent,\n\tErrorType,\n\tEmptyType,\n\tLoadingType,\n} from '.\/components';\n\nexport type FallbackProps = {\n\t\/* error *\/\n\thasError?: boolean;\n\terrorTitle?: string;\n\terrorCopy?: string;\n\terrorType?: ErrorType;\n\t\/* loading *\/\n\tisLoading?: boolean;\n\tloadingTitle?: string;\n\tloadingCopy?: string;\n\tloadingType?: LoadingType;\n\t\/* empty *\/\n\tisEmpty?: boolean;\n\temptyTitle?: string;\n\temptyCopy?: string;\n\temptyType?: EmptyType;\n};\n\n\/\/ TODO: refactor to pass down container height\n\n\/\/ TODO: add component fragments here\n\n\/** The Fallback component simplifies conditional rendering based on component state\n * using a Suspense-like api.\n * Accepts three predicate props: hasError, isLoading and isEmpty. If any evaluate,\n * returns the associated component. Otherwise, returns its children.\n *\n * Also accepts props to pass though title, copy, and a type to the fallback components.\n *\n * @example\n *\n * Suspense-Like Api\n *\n * \/\/ SomeChild is rendered only if is not erroring, loading, or empty.\n *\n * <Fallback isEmpty={props.empty} isLoading={props.loading} hasError={props.error} >\n *    <SomeChild\/>\n * <\/Fallback>\n *\n * @example Early Return Api\n *\n * if (props.loading) {\n *    return <FallbackComponent isLoading\/>\n * }\n *\n * return <ComponentNotLoading\/>\n *\n *  *\/\n\nexport const Fallback: React.FC<FallbackProps> = (props) => {\n\tif (props.hasError)\n\t\treturn (\n\t\t\t<ErrorComponent\n\t\t\t\ttype={props.errorType}\n\t\t\t\ttitle={props.errorTitle}\n\t\t\t\tcopy={props.errorCopy}\n\t\t\t\/>\n\t\t);\n\tif (props.isLoading)\n\t\treturn (\n\t\t\t<LoadingComponent\n\t\t\t\ttype={props.loadingType}\n\t\t\t\ttitle={props.loadingTitle}\n\t\t\t\tcopy={props.loadingCopy}\n\t\t\t\/>\n\t\t);\n\tif (props.isEmpty)\n\t\treturn (\n\t\t\t<EmptyComponent\n\t\t\t\ttype={props.emptyType}\n\t\t\t\ttitle={props.emptyTitle}\n\t\t\t\tcopy={props.emptyCopy}\n\t\t\t\/>\n\t\t);\n\treturn <>{props.children}<\/>;\n};\n\nexport default Fallback;\n",
+          "Date Modified" : "2022-03-08 09:52:08 +0000",
+          "Note" : "",
+          "Title" : "Fallback",
+          "Language" : "TypeScript",
+          "Date Created" : "2022-03-06 22:21:38 +0000"
+        },
+        {
+          "Content" : "",
+          "Date Modified" : "2022-03-08 09:54:08 +0000",
+          "Note" : "",
+          "Title" : "Error",
+          "Language" : "Plain Text",
+          "Date Created" : "2022-03-08 09:51:50 +0000"
+        },
+        {
+          "Content" : "",
+          "Date Modified" : "2022-03-08 09:54:20 +0000",
+          "Note" : "",
+          "Title" : "Empty",
+          "Language" : "Plain Text",
+          "Date Created" : "2022-03-08 09:54:13 +0000"
+        },
+        {
+          "Content" : "",
+          "Date Modified" : "2022-03-08 09:54:23 +0000",
+          "Note" : "",
+          "Title" : "Loading",
+          "Language" : "Plain Text",
+          "Date Created" : "2022-03-08 09:54:20 +0000"
+        }
+      ],
+      "Tags" : [
+
+      ]
+    },
+    {
+      "Date Created" : "2022-04-06 13:47:51 +0100",
+      "Date Modified" : "2022-04-06 14:06:42 +0100",
+      "Folder" : "Typescript",
+      "Title" : "ObjectKeyedByList",
+      "Fragments" : [
+        {
+          "Content" : "\/** Passed type of a readonly array (e.g., as const), returns an object type keyed by members of the list. Optionally accepts a second argument denoting the value types of the object. *\/\n\n\ntype ObjectKeyedByList<\n  LIST extends readonly (string | number | symbol)[],\n  VAL = unknown\n> = {\n  [KEY in LIST[number]]: VAL;\n};",
+          "Date Modified" : "2022-04-06 14:14:50 +0100",
+          "Note" : "",
+          "Title" : "Fragment",
+          "Language" : "TypeScript",
+          "Date Created" : "2022-04-06 13:47:51 +0100"
+        }
+      ],
+      "Tags" : [
+
+      ]
+    },
+    {
+      "Date Created" : "2022-03-10 09:09:00 +0000",
+      "Date Modified" : "2022-03-10 09:09:07 +0000",
+      "Folder" : "Components",
+      "Title" : "Context",
+      "Fragments" : [
+        {
+          "Content" : "import React from 'react';\n\ntype NavbarContextValue = {\n  isOpen: boolean;\n  open: () => void;\n  close: () => void;\n};\n\nconst defaultValue = {\n  isOpen: false,\n  open: () => console.log('open'),\n  close: () => console.log('close'),\n};\n\nexport const NavbarContext =\n  React.createContext<NavbarContextValue>(defaultValue);\n\nexport const NavbarProvider: React.FC = ({ children }) => {\n  const [isOpen, setIsOpen] = React.useState<NavbarContextValue['isOpen']>(\n    defaultValue.isOpen\n  );\n\n  const open = () => setIsOpen(false);\n  const close = () => setIsOpen(true);\n\n  const value = {\n    isOpen,\n    open,\n    close,\n  };\n\n  return (\n    <NavbarContext.Provider value={value}>{children}<\/NavbarContext.Provider>\n  );\n};\n\nexport default NavbarProvider;\n",
+          "Date Modified" : "2022-03-10 09:11:59 +0000",
+          "Note" : "",
+          "Title" : "Fragment",
+          "Language" : "TypeScript",
+          "Date Created" : "2022-03-10 09:09:00 +0000"
+        }
+      ],
+      "Tags" : [
+
+      ]
+    },
+    {
+      "Date Created" : "2022-04-06 14:06:45 +0100",
+      "Date Modified" : "2022-04-06 14:06:57 +0100",
+      "Folder" : "Typescript",
+      "Title" : "ObjectValuedByList",
+      "Fragments" : [
+        {
+          "Content" : "\/** Passed type of a readonly array (e.g., as const), returns an object type valued by members of the list *\/\n\ntype ObjectValuedByList<LIST extends readonly (string | number | symbol)[]> = {\n  [key: string | number | symbol]: LIST[number];\n};",
+          "Date Modified" : "2022-04-06 14:14:24 +0100",
+          "Note" : "",
+          "Title" : "Fragment",
+          "Language" : "TypeScript",
+          "Date Created" : "2022-04-06 14:06:45 +0100"
+        }
+      ],
+      "Tags" : [
+
+      ]
+    },
+    {
+      "Date Created" : "2022-03-04 09:05:04 +0000",
+      "Date Modified" : "2022-03-04 09:05:09 +0000",
+      "Folder" : "Shortcuts",
+      "Title" : "Morning Standup",
+      "Fragments" : [
+        {
+          "Content" : ":dancer: \n:octagonal_sign: None\n:rocket:",
+          "Date Modified" : "2022-03-06 22:04:50 +0000",
+          "Note" : "",
+          "Title" : "Fragment",
+          "Language" : "Plain Text",
+          "Date Created" : "2022-03-04 09:05:04 +0000"
+        }
+      ],
+      "Tags" : [
+
+      ]
+    },
+    {
+      "Date Created" : "2022-03-11 12:17:35 +0000",
+      "Date Modified" : "2022-03-11 12:17:37 +0000",
+      "Folder" : "Components",
+      "Title" : "Row",
+      "Fragments" : [
+        {
+          "Content" : "const Row = styled.div`\n  display: flex;\n  align-items: center;\n  gap: 0.5rem;\n`;",
+          "Date Modified" : "2022-03-11 12:17:58 +0000",
+          "Note" : "",
+          "Title" : "Fragment",
+          "Language" : "TypeScript",
+          "Date Created" : "2022-03-11 12:17:35 +0000"
+        }
+      ],
+      "Tags" : [
+
+      ]
+    },
+    {
+      "Date Created" : "2022-03-07 08:47:35 +0000",
+      "Date Modified" : "2022-03-07 08:47:39 +0000",
+      "Folder" : "Hooks",
+      "Title" : "useTabDetection",
+      "Fragments" : [
+        {
+          "Content" : "import * as React from 'react';\nimport { useKey } from 'react-use';\n\n\/** Detects whether user is tabbing through document as opposed\n * to navigating with mouse. If user tabs, set to true. If user\n * mouse clicks, set to false. Returns boolean indicating current tabbing value.\n * Internally sets document.body.dataset.tabbing to String(tabbingValue).\n *\/\n \n \/\/ TODO: handle useKey internally\n\nexport const useTabDetection = () => {\n  const [tabbing, setTabbing] = React.useState(false);\n  useKey('Tab', () => setTabbing(true));\n\n  \/* If user clicks no longer tabbing b\/c using mouse *\/\n  React.useEffect(() => {\n    const setTabbingFalse = () => {\n        setTabbing(false);\n    };\n    if (!document) return;\n    \/\/ mousedown not click b\/c enter key triggers click\n    \/\/ on button elements\n    document.addEventListener('mousedown', setTabbingFalse);\n    return () => {\n      document.removeEventListener('mousedown', setTabbingFalse);\n    };\n  }, [tabbing]);\n\n  React.useEffect(() => {\n    document.body.dataset.tabbing = String(tabbing);\n  }, [tabbing]);\n\n  return tabbing;\n};\n\nexport default useTabDetection;\n",
+          "Date Modified" : "2022-03-07 08:55:24 +0000",
+          "Note" : "",
+          "Title" : "Fragment",
+          "Language" : "TypeScript",
+          "Date Created" : "2022-03-07 08:47:35 +0000"
+        }
+      ],
+      "Tags" : [
+
+      ]
+    },
+    {
+      "Date Created" : "2022-03-03 19:17:00 +0000",
+      "Date Modified" : "2022-03-07 08:47:33 +0000",
+      "Folder" : "Hooks",
+      "Title" : "useConditionalFocus",
+      "Fragments" : [
+        {
+          "Content" : "import * as React from 'react'\n\n\/** Passed a ref and a condition,\n *  triggers a focus event on the referent \n *  if the condition is true.\n *  Useful for managing focus for keyboard and screen reader users.\n *  @example\n *  \/\/ an element referenced by 'ref'\n *  \/\/ will focus if isLoggedIn.\n *  const focusRef = useConditionalFocus(ref, isLoggedIn);\n *\/\n\nexport const useConditionalFocus = (\n  ref: React.RefObject<HTMLElement>,\n  cond: boolean\n): void => {\n  React.useEffect(() => {\n    if (ref && ref.current && cond) {\n      ref.current.focus()\n    }\n  }, [cond])\n}\n\nexport default useConditionalFocus\n",
+          "Date Modified" : "2022-03-06 22:14:18 +0000",
+          "Note" : "",
+          "Title" : "Fragment",
+          "Language" : "TypeScript",
+          "Date Created" : "2022-03-03 19:17:00 +0000"
+        }
+      ],
+      "Tags" : [
+
+      ]
+    },
+    {
+      "Date Created" : "2022-03-17 14:03:39 +0000",
+      "Date Modified" : "2022-03-17 14:03:52 +0000",
+      "Folder" : "Hooks",
+      "Title" : "useIsHovered",
+      "Fragments" : [
+        {
+          "Content" : "import * as React from 'react';\n\nexport const useIsHovered = <T extends HTMLElement = HTMLElement>(\n\tref: React.MutableRefObject<T> | React.RefObject<T>\n) => {\n\tconst [state, setState] = React.useState<boolean>(false);\n\n\tReact.useEffect(() => {\n\t\tif (ref?.current) {\n\t\t\tconst handleMouseEnter = () => setState(true);\n\t\t\tconst handleMouseLeave = () => setState(false);\n\t\t\tconst current = ref?.current;\n\n\t\t\tif (current) {\n\t\t\t\tcurrent.addEventListener('mouseenter', handleMouseEnter);\n\t\t\t\tcurrent.addEventListener('mouseleave', handleMouseLeave);\n\n\t\t\t\treturn () => {\n\t\t\t\t\tcurrent.removeEventListener('mouseenter', handleMouseEnter);\n\t\t\t\t\tcurrent.removeEventListener('mouseleave', handleMouseLeave);\n\t\t\t\t};\n\t\t\t}\n\t\t}\n\t}, [ref]);\n\n\treturn state;\n};\n\nexport default useIsHovered;\n",
+          "Date Modified" : "2022-03-17 14:03:45 +0000",
+          "Note" : "",
+          "Title" : "Fragment",
+          "Language" : "TypeScript",
+          "Date Created" : "2022-03-17 14:03:39 +0000"
+        }
+      ],
+      "Tags" : [
+
+      ]
+    },
+    {
+      "Date Created" : "2022-03-08 11:47:22 +0000",
+      "Date Modified" : "2022-03-08 11:47:48 +0000",
+      "Folder" : "Styles",
+      "Title" : "Theme",
+      "Fragments" : [
+        {
+          "Content" : "import { palettes } from '.\/palettes';\n\n\/** Readonly theme object.\n *  To make edits or add new theme properties\n *  add \/ remove properties from below\n *\/\n\nexport const theme = {\n  colors: {\n    primary: palettes.teal,\n    paper: palettes.teal,\n    talk: palettes.teal,\n    project: palettes.lime,\n    success: palettes.lime,\n    info: palettes.orange,\n    danger: palettes.red,\n    text: palettes.grey,\n    background: palettes.grey,\n  },\n  font: {\n    family: {\n      primary: 'Outfit, sans-serif',\n      display: 'Outfit, sans-serif',\n    },\n    size: {\n      xs: '0.5rem',\n      sm: '0.875rem',\n      md: '1rem',\n      lg: '1.25rem',\n      xl: '1.5rem',\n      xxl: '2rem',\n    },\n    weight: {\n      lightest: 50,\n      ultraLight: 100,\n      superLight: 200,\n      light: 300,\n      semiLight: 400,\n      medium: 500,\n      semiBold: 600,\n      bold: 700,\n      superBold: 800,\n      ultraBold: 900,\n      boldest: 1000,\n    },\n    tracking: {\n      xxs: '0.0025rem',\n      xs: '0.005rem',\n      sm: '0.01rem',\n      md: '0.05rem',\n      lg: '0.1rem',\n      xl: '0.15rem',\n      xxl: '0.2rem',\n    },\n  },\n  shadow: {\n    card: 'rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;',\n  },\n  radius: {\n    xxs: '0.125rem',\n    xs: '0.25rem',\n    md: '0.5rem',\n    lg: '0.75rem',\n    xl: '1rem',\n    xxl: '2rem',\n    round: '50%',\n  },\n  breakPoint: {\n    xxs: '320px',\n    xs: '375px',\n    sm: '425px',\n    md: '768px',\n    lg: '1024px',\n    xl: '1440px',\n    xxl: '2560px',\n  },\n} as const;\n\nexport default theme;\n",
+          "Date Modified" : "2022-04-18 24:03:56 +0100",
+          "Note" : "",
+          "Title" : "Emotion",
+          "Language" : "JavaScript",
+          "Date Created" : "2022-03-08 11:47:22 +0000"
+        },
+        {
+          "Content" : "import '@emotion\/react'\nimport { CustomTheme } from '.\/theme'\n\ndeclare module '@emotion\/react' {\n  export interface Theme extends CustomTheme {}\n}",
+          "Date Modified" : "2022-03-08 11:48:55 +0000",
+          "Note" : "emotion.d.ts",
+          "Title" : "Emotion TS Override",
+          "Language" : "TypeScript",
+          "Date Created" : "2022-03-08 11:47:48 +0000"
+        }
+      ],
+      "Tags" : [
+
+      ]
+    },
+    {
+      "Date Created" : "2022-03-08 11:34:38 +0000",
+      "Date Modified" : "2022-03-15 09:31:52 +0000",
+      "Folder" : "Styles",
+      "Title" : "CSS Reset",
+      "Fragments" : [
+        {
+          "Content" : "import { Global, css } from \"@emotion\/react\";\n\nconst reset = css`\n\/* https:\/\/www.joshwcomeau.com\/css\/custom-css-reset\/ *\/\n*, *::before, *::after {\n  box-sizing: border-box;\n}\n\n* {\n  margin: 0;\n}\n\nhtml, body {\n  height: 100%;\n}\n\nbody {\n  line-height: 1.5;\n  -webkit-font-smoothing: antialiased;\n}\n\nimg, picture, video, canvas, svg {\n  display: block;\n}\n\ninput, button, textarea, select {\n  font: inherit;\n}\n\np, h1, h2, h3, h4, h5, h6 {\n  overflow-wrap: break-word;\n}\n\n#root, #__next {\n  isolation: isolate;\n}\n\n\/* Disable common vendor styles *\/\nul, ol {\n  list-style: none;\n}\n\na {\n  text-decoration: none;\n}\n\nbutton {\n  background: unset;\n  border: unset;\n  cursor: pointer;\n}\n\na {\n  cursor: pointer;\n}\n\naddress {\n  font-style: normal;\n}\n`;\n\nexport const GlobalStyles = () => <Global styles={reset} \/>;\n",
+          "Date Modified" : "2022-04-10 18:27:25 +0100",
+          "Note" : "Globals.tsx\n",
+          "Title" : "Emotion",
+          "Language" : "TypeScript",
+          "Date Created" : "2022-03-08 11:37:02 +0000"
+        }
+      ],
+      "Tags" : [
+
+      ]
+    },
+    {
+      "Date Created" : "2022-03-16 17:33:02 +0000",
+      "Date Modified" : "2022-03-16 17:33:15 +0000",
+      "Folder" : "Hooks",
+      "Title" : "useLocalStorage",
+      "Fragments" : [
+        {
+          "Content" : "import * as React from 'react';\n\ntype UseLocalStorageType = (\n  key: string\n) => [string | null, (val: string) => void, () => void];\n\nexport const useLocalStorage: UseLocalStorageType = (key) => {\n  const [value, setValue] = React.useState<string | null>(null);\n\n  React.useEffect(() => {\n    if (typeof window === 'undefined') return;\n    const stored = window?.localStorage.getItem(key);\n    setValue(stored);\n  }, [key]);\n\n  const handleRemove = () => {\n    try {\n      if (typeof window === 'undefined') throw new Error('window is undefined');\n      window?.localStorage.removeItem(key);\n      setValue(null);\n    } catch (e) {\n      console.error({\n        errorMessage:\n          e instanceof Error && e.message ? e.message : 'An error occurred',\n        error: 'Problem removing local storage key ' + key + '.',\n      });\n    }\n  };\n\n  const handleSet = (val: string) => {\n    try {\n      if (typeof window === 'undefined') throw new Error('window is undefined');\n      window?.localStorage.setItem(key, val);\n      setValue(val);\n    } catch (e) {\n      console.error({\n        errorMessage:\n          e instanceof Error && e.message ? e.message : 'An error occurred',\n        error:\n          'Problem setting local storage key ' +\n          key +\n          ' with value' +\n          val +\n          '.',\n      });\n    }\n  };\n\n  return [value, handleSet, handleRemove];\n};\n\nexport default useLocalStorage;\n",
+          "Date Modified" : "2022-03-16 17:33:22 +0000",
+          "Note" : "",
+          "Title" : "Fragment",
+          "Language" : "TypeScript",
+          "Date Created" : "2022-03-16 17:33:02 +0000"
+        }
+      ],
+      "Tags" : [
+
+      ]
+    },
+    {
+      "Date Created" : "2022-04-18 24:02:13 +0100",
+      "Date Modified" : "2022-04-18 24:02:16 +0100",
+      "Folder" : "Styles",
+      "Title" : "Palettes",
+      "Fragments" : [
+        {
+          "Content" : "\/**\n * Add palettes here. The default palettes are of the type GradientPalette.\n * Their properties are: white, ultralight, lighter, light, regular, dark,\n * darker, superdark, ultradark, black.\n * \n * You can add whatever palettes you want, with whatever shape.\n * \n * You can use this handy helper to pick a mid color, \n * then combine generated gradients to black and white\n *  https:\/\/coolors.co\/gradient-palette\/f9f1f2-420203?number=6\n *\/\n\nexport const palettes = {\n  red: {\n    white: '#F9E6E6',\n    ultralight: '#F8C1C1',\n    superlight: '#F79B9B',\n    lighter: '#F67676',\n    light: '#F55050',\n    regular: '#F42B2B',\n    dark: '#CB2323',\n    darker: '#A21A1A',\n    superdark: '#781212',\n    ultradark: '#4F0909',\n    black: '#260101',\n  },\n  orange: {\n    white: '#FFF4E6',\n    ultralight: '#FFDAC6',\n    superlight: '#FFC4A4',\n    lighter: '#FFAE83',\n    light: '#FF9861',\n    regular: '#FF823F',\n    dark: '#D46B33',\n    darker: '#AA5426',\n    superdark: '#7F3D1A',\n    ultradark: '#55260D',\n    black: '#2A0F01',\n  },\n  yellow: {\n    white: '#FFF4E6',\n    ultralight: '#FFEBC6',\n    superlight: '#FFE2A6',\n    lighter: '#FFD985',\n    light: '#FFD065',\n    regular: '#FFC745',\n    dark: '#D5A537',\n    darker: '#AB8429',\n    superdark: '#81621C',\n    ultradark: '#57410E',\n    black: '#2D1F00',\n  },\n  lime: {\n    white: '#F8FBF2',\n    ultralight: '#E8F6D1',\n    superlight: '#D8F1AF',\n    lighter: '#C9ED8E',\n    light: '#B9E86C',\n    regular: '#A9E34B',\n    dark: '#8DBE3C',\n    darker: '#70982D',\n    superdark: '#54731F',\n    ultradark: '#374D10',\n    black: '#1B2801',\n  },\n  green: {\n    white: '#EFFFF2',\n    ultralight: '#D4F8DA',\n    superlight: '#B9F1C3',\n    lighter: '#9FE9AB',\n    light: '#84E294',\n    regular: '#69DB7C',\n    dark: '#54B765',\n    darker: '#3F934E',\n    superdark: '#2A7036',\n    ultradark: '#154C1F',\n    black: '#002808',\n  },\n  teal: {\n    white: '#EAF9F4',\n    ultralight: '#C6F3E5',\n    superlight: '#A3ECD6',\n    lighter: '#7FE6C7',\n    light: '#5CDFB8',\n    regular: '#38D9A9',\n    dark: '#2DB88E',\n    darker: '#229773',\n    superdark: '#177558',\n    ultradark: '#0C543D',\n    black: '#013322',\n  },\n  cyan: {\n    white: '#E2F4F6',\n    ultralight: '#C1EBF1',\n    superlight: '#9FE3EB',\n    lighter: '#7EDAE6',\n    light: '#5CD2E0',\n    regular: '#3BC9DB',\n    dark: '#2FA9B8',\n    darker: '#238995',\n    superdark: '#186873',\n    ultradark: '#0C4850',\n    black: '#00282D',\n  },\n  blue: {\n    white: '#E9F4FE',\n    ultralight: '#CAE5FD',\n    superlight: '#A5D8FF',\n    lighter: '#8BC8FA',\n    light: '#6CBAF8',\n    regular: '#4DABF7',\n    dark: '#3E8DCF',\n    darker: '#2E70A6',\n    superdark: '#1F537E',\n    ultradark: '#0F3555',\n    black: '#00172D',\n  },\n  indigo: {\n    white: '#ECEFFA',\n    ultralight: '#D4DCFA',\n    superlight: '#BCC9FB',\n    lighter: '#A4B5FB',\n    light: '#91A7FF',\n    regular: '#748FFC',\n    dark: '#5D75D4',\n    darker: '#465AAC',\n    superdark: '#2E4085',\n    ultradark: '#17255D',\n    black: '#000B35',\n  },\n  purple: {\n    white: '#F1F4FF',\n    ultralight: '#DFDBFE',\n    superlight: '#CDC1FD',\n    lighter: '#BBA8FC',\n    light: '#A98EFB',\n    regular: '#9775FA',\n    dark: '#7E5ED5',\n    darker: '#6647B0',\n    superdark: '#7950F2',\n    ultradark: '#351967',\n    black: '#1C0242',\n  },\n  grape: {\n    white: '#F0E1F4',\n    ultralight: '#ECCCF4',\n    superlight: '#EEBEFA',\n    lighter: '#E3A1F3',\n    light: '#DE8CF2',\n    regular: '#DA77F2',\n    dark: '#B660CB',\n    darker: '#9249A4',\n    superdark: '#6F337D',\n    ultradark: '#4B1C56',\n    black: '#27052F',\n  },\n  pink: {\n    white: '#F5EBEF',\n    ultralight: '#F5D6E2',\n    superlight: '#F6C1D4',\n    lighter: '#F6ADC7',\n    light: '#F798B9',\n    regular: '#F783AC',\n    dark: '#CF698E',\n    darker: '#A75070',\n    superdark: '#803651',\n    ultradark: '#581D33',\n    black: '#300315',\n  },\n  grey: {\n    white: '#F9F9F9',\n    ultralight: '#E3E3E3',\n    superlight: '#CDCDCD',\n    lighter: '#B7B7B7',\n    light: '#A1A1A1',\n    regular: '#949494',\n    dark: '#747474',\n    darker: '#5E5E5E',\n    superdark: '#484848',\n    ultradark: '#323232',\n    black: '#1C1C1C',\n  },\n  grey_warm: {\n    white: '#F8F3EB',\n    ultralight: '#E3DCD0',\n    superlight: '#CEC5B5',\n    lighter: '#BAAD9B',\n    light: '#A59680',\n    regular: '#907F65',\n    dark: '#7A6A51',\n    darker: '#64553D',\n    superdark: '#4F4029',\n    ultradark: '#392B15',\n    black: '#231601',\n  },\n  grey_cool: {\n    white: '#F1F1FD',\n    ultralight: '#D9D9E7',\n    superlight: '#C1C1D2',\n    lighter: '#A8AABC',\n    light: '#9092A7',\n    regular: '#787A91',\n    dark: '#65677B',\n    darker: '#525365',\n    superdark: '#3F404F',\n    ultradark: '#2C2C39',\n    black: '#191923',\n  },\n} as const;",
+          "Date Modified" : "2022-04-18 24:02:17 +0100",
+          "Note" : "",
+          "Title" : "Fragment",
+          "Language" : "JavaScript",
+          "Date Created" : "2022-04-18 24:02:13 +0100"
+        }
+      ],
+      "Tags" : [
+
+      ]
+    },
+    {
+      "Date Created" : "2022-03-08 13:22:35 +0000",
+      "Date Modified" : "2022-03-08 13:24:16 +0000",
+      "Folder" : "Components",
+      "Title" : "Typography",
+      "Fragments" : [
+        {
+          "Content" : "import styled from '@emotion\/styled';\nimport { css } from '@emotion\/react';\n\ntype FontSizeId = 'xs3' | 'xs2' | 'xs' | 'sm' | 'md' | 'lg' | 'xl2' | 'xl3';\n\ntype FontFamilyId = 'display' | 'body';\n\ntype FontColorId = 'dark' | 'light' | 'accent';\n\nconst sizes = {\n  xs3: '0.25rem',\n  xs2: '0.5rem',\n  xs: '0.75rem',\n  sm: '1rem',\n  md: '1.25rem',\n  lg: '1.5rem',\n  xl: '2rem',\n  xl2: '4rem',\n  xl3: '5rem',\n};\n\nconst fonts = {\n  body: '',\n  display: '',\n};\n\nconst colors = {\n  dark: '',\n  light: '',\n  accent: '',\n};\n\ntype TypographyProps = {\n  size?: FontSizeId;\n  font?: FontFamilyId;\n  color?: FontColorId;\n};\n\nexport const Title = styled.h1<TypographyProps>`\n  ${({ size, font, color }) => css`\n    font-family: ${fonts[font ?? 'display']};\n    font-size: ${sizes[size ?? 'lg']};\n    color: ${colors[color ?? 'dark']};\n  `}\n`;\n\nexport const Heading = styled.h2<TypographyProps>`\n  ${({ size, font, color }) => css`\n    font-family: ${fonts[font ?? 'body']};\n    font-size: ${sizes[size ?? 'lg']};\n    color: ${colors[color ?? 'dark']};\n  `}\n`;\n\nexport const Paragraph = styled.p<TypographyProps>`\n  ${({ size, font, color }) => css`\n    font-family: ${fonts[font ?? 'body']};\n    font-size: ${sizes[size ?? 'md']};\n    color: ${colors[color ?? 'dark']};\n  `}\n`;\n\nexport const Caption = styled.caption<TypographyProps>`\n  ${({ size, font, color }) => css`\n    font-family: ${fonts[font ?? 'body']};\n    font-size: ${sizes[size ?? 'md']};\n    color: ${colors[color ?? 'light']};\n    text-transform: uppercase;\n  `}\n`;\n",
+          "Date Modified" : "2022-03-08 13:25:47 +0000",
+          "Note" : "",
+          "Title" : "Emotion",
+          "Language" : "TypeScript",
+          "Date Created" : "2022-03-08 13:22:35 +0000"
+        }
+      ],
+      "Tags" : [
+
+      ]
+    },
+    {
+      "Date Created" : "2022-03-11 12:18:07 +0000",
+      "Date Modified" : "2022-03-11 12:18:35 +0000",
+      "Folder" : "Components",
+      "Title" : "Col",
+      "Fragments" : [
+        {
+          "Content" : "const Col = styled.div`\n  display: flex;\n  flex-direction: column;\n  gap: 0.5rem;\n`;",
+          "Date Modified" : "2022-03-11 12:18:37 +0000",
+          "Note" : "",
+          "Title" : "Fragment",
+          "Language" : "TypeScript",
+          "Date Created" : "2022-03-11 12:18:07 +0000"
+        }
+      ],
+      "Tags" : [
+
+      ]
+    },
+    {
+      "Date Created" : "2022-03-06 22:21:58 +0000",
+      "Date Modified" : "2022-03-06 22:22:10 +0000",
+      "Folder" : "Components",
+      "Title" : "EmptyString",
+      "Fragments" : [
+        {
+          "Content" : "import * as React from 'react';\n\n\/** Returns an empty string. Will not be filtered out by React. *\/\n\nexport const EmptyString: React.FC = () => (\n\t<span aria-hidden=\"true\">&nbsp;&nbsp;<\/span>\n);\n\nexport default EmptyString;\n",
+          "Date Modified" : "2022-03-21 16:27:16 +0000",
+          "Note" : "",
+          "Title" : "Fragment",
+          "Language" : "TypeScript",
+          "Date Created" : "2022-03-06 22:21:58 +0000"
+        }
+      ],
+      "Tags" : [
+
+      ]
+    },
+    {
+      "Date Created" : "2022-04-28 09:43:33 +0100",
+      "Date Modified" : "2022-04-28 09:43:39 +0100",
+      "Folder" : "Hooks",
+      "Title" : "usePagination",
+      "Fragments" : [
+        {
+          "Content" : "import * as React from 'react';\n\n\/** Extracts the logic required for pagination.\n * Accepts a configuration object with two required properties:\n *\n * count (number, optional) the number of items in the paginated list\n *\n * take (number) the number of items per page\n *\n * initialPage (number, optional) the initial page to display\n *\n * Note: 'count' and 'take' get passed through to avoid having to declare them\n * in the outer scope. This is entirely for convenience.\n *\/\n\nexport const usePagination = (config: {\n  take: number;\n  count?: number;\n  initialPage?: number;\n}) => {\n  const [currentPage, setCurrentPage] = React.useState(config.initialPage ?? 1);\n  const [count, setCount] = React.useState(config.count ?? 0);\n\n  const { take } = config;\n  const pageCount = Math.ceil(count \/ take);\n  const skip = take * (currentPage - 1);\n\n  const isLastPage = currentPage >= pageCount;\n  const isFirstPage = currentPage === 1;\n  const isMultiPage = pageCount > 1;\n\n  const handlePaginate = (page: number) => {\n    if (!isMultiPage) return;\n    if (!isFirstPage && page < currentPage) setCurrentPage(page);\n    if (!isLastPage && page > currentPage) setCurrentPage(page);\n  };\n\n  const updateCount = (newCount: number) => setCount(newCount);\n  const updateCurrentPage = (newPage: number) => setCurrentPage(newPage);\n\n  \/\/ we may need to wait for data to load before we get the count\n  \/\/ until we provide a value for 'count', or\n  \/\/ until we set the count with 'updateCount'\n  const isPaginated = typeof count !== 'undefined';\n\n  return {\n    currentPage,\n    pageCount,\n    handlePaginate,\n    isLastPage,\n    isFirstPage,\n    isMultiPage,\n    isPaginated,\n    updateCount,\n    updateCurrentPage,\n    skip,\n    take,\n    count,\n  };\n};\n\nexport default usePagination;\n",
+          "Date Modified" : "2022-05-06 12:47:50 +0100",
+          "Note" : "",
+          "Title" : "Fragment",
+          "Language" : "TypeScript",
+          "Date Created" : "2022-04-28 09:43:33 +0100"
+        }
+      ],
+      "Tags" : [
+
+      ]
+    },
+    {
+      "Date Created" : "2022-04-28 09:44:21 +0100",
+      "Date Modified" : "2022-04-28 09:44:26 +0100",
+      "Folder" : "Hooks",
+      "Title" : "useObserveKeyPress",
+      "Fragments" : [
+        {
+          "Content" : "import * as React from 'react';\n\nexport type UseObserveKeyPressConfig = [\n\tkeys: KeyboardEvent['key'][],\n\tcondition?: 'every' | 'some'\n];\n\nexport type UseObserveKeyPressType = (\n\t...args: UseObserveKeyPressConfig\n) => boolean;\n\n\/** Tracks the press status of 1 or more keys.\n * Accepts (1) a required 'keys' array, and (2) an optional 'condition'\n * of either 'every' (default) or 'some'.\n * If 'some', true is returned only if at least one of the keys is pressed.\n * If 'every', true is returned only if all are pressed.\n * If an empty array is passed as the keys array, false is returned.\n *\n * @example\n *\n * const allPressed = useObserveKeyPress(['a', 'b'])\n * \/\/ => true if 'a' and 'b' are pressed;\n *\n * const somePressed = useObserveKeyPress(['a', 'b'], 'some')\n * \/\/ => true if 'a' or 'b' are pressed.\n *\n *\/\n\nexport const useObserveKeyPress: UseObserveKeyPressType = (\n\tkeys,\n\tcondition = 'every'\n) => {\n\tconst [pressed, setPressed] = React.useState<Set<string>>(new Set());\n\n\tconst downHandler = React.useCallback(\n\t\t({ key }) => {\n\t\t\tpressed.add(key);\n\t\t\tsetPressed(new Set(pressed));\n\t\t},\n\t\t[pressed]\n\t);\n\n\tconst upHandler = React.useCallback(\n\t\t({ key }) => {\n\t\t\tpressed.delete(key);\n\t\t\tsetPressed(new Set(pressed));\n\t\t},\n\t\t[pressed]\n\t);\n\n\tReact.useEffect(() => {\n\t\twindow.addEventListener('keydown', downHandler);\n\t\twindow.addEventListener('keyup', upHandler);\n\t\treturn () => {\n\t\t\twindow.removeEventListener('keydown', downHandler);\n\t\t\twindow.removeEventListener('keyup', upHandler);\n\t\t};\n\t}, [downHandler, upHandler]);\n\n\treturn keys.length && condition === 'every'\n\t\t? keys.every((key) => pressed.has(key))\n\t\t: keys.some((key) => pressed.has(key));\n};\n\nexport default useObserveKeyPress;\n",
+          "Date Modified" : "2022-04-28 09:44:28 +0100",
+          "Note" : "",
+          "Title" : "Fragment",
+          "Language" : "TypeScript",
+          "Date Created" : "2022-04-28 09:44:21 +0100"
+        }
+      ],
+      "Tags" : [
+
+      ]
+    },
+    {
+      "Date Created" : "2022-04-28 09:46:07 +0100",
+      "Date Modified" : "2022-04-28 09:46:10 +0100",
+      "Folder" : "Hooks",
+      "Title" : "useIsFocused",
+      "Fragments" : [
+        {
+          "Content" : "import * as React from 'react';\n\nexport const useIsFocused = (\n  ref: React.MutableRefObject<HTMLElement> | React.RefObject<HTMLElement>\n) => {\n  const [state, setState] = React.useState(false);\n\n  React.useEffect(() => {\n    if (!ref?.current) return;\n    const onFocus = () => setState(true);\n    const onBlur = () => setState(false);\n    ref.current.addEventListener('focus', onFocus);\n    ref.current.addEventListener('blur', onBlur);\n\n    const current = ref.current;\n\n    return () => {\n      current.removeEventListener('focus', onFocus);\n      current.removeEventListener('blur', onBlur);\n    };\n  }, [ref]);\n\n  return state;\n};\n\nexport default useIsFocused;\n",
+          "Date Modified" : "2022-04-28 09:46:44 +0100",
+          "Note" : "",
+          "Title" : "Fragment",
+          "Language" : "TypeScript",
+          "Date Created" : "2022-04-28 09:46:07 +0100"
+        }
+      ],
+      "Tags" : [
+
+      ]
+    },
+    {
+      "Date Created" : "2022-04-29 12:00:46 +0100",
+      "Date Modified" : "2022-04-29 12:00:51 +0100",
+      "Folder" : "Hooks",
+      "Title" : "useOnMount",
+      "Fragments" : [
+        {
+          "Content" : "import * as React from 'react';\n\nexport const useOnMount = (func: () => unknown) => {\n  React.useEffect(() => {\n    func();\n  }, [func]);\n};",
+          "Date Modified" : "2022-05-04 11:08:10 +0100",
+          "Note" : "",
+          "Title" : "Fragment",
+          "Language" : "TypeScript",
+          "Date Created" : "2022-04-29 12:00:46 +0100"
+        }
+      ],
+      "Tags" : [
+
+      ]
+    },
+    {
+      "Date Created" : "2022-05-04 11:03:52 +0100",
+      "Date Modified" : "2022-05-04 11:03:57 +0100",
+      "Folder" : "Hooks",
+      "Title" : "useOnUnmount",
+      "Fragments" : [
+        {
+          "Content" : "export const useOnUnmount = (func: () => void) => {\n  React.useEffect(() => func, [func]);\n};\n",
+          "Date Modified" : "2022-05-04 11:09:59 +0100",
+          "Note" : "",
+          "Title" : "Fragment",
+          "Language" : "TypeScript",
+          "Date Created" : "2022-05-04 11:03:52 +0100"
+        }
+      ],
+      "Tags" : [
+
+      ]
+    },
+    {
+      "Date Created" : "2022-05-06 10:47:31 +0100",
+      "Date Modified" : "2022-05-06 10:47:34 +0100",
+      "Folder" : "Hooks",
+      "Title" : "useOnTruthy",
+      "Fragments" : [
+        {
+          "Content" : "import * as React from 'react';\n\nexport const useOnTruthy = <T>(\n  func: (arg: T) => unknown,\n  arg: T | undefined | null | false\n) => {\n  React.useEffect(() => {\n    if (arg) {\n      func(arg);\n    }\n  }, [arg]);\n};\n",
+          "Date Modified" : "2022-05-06 10:47:35 +0100",
+          "Note" : "",
+          "Title" : "Fragment",
+          "Language" : "TypeScript",
+          "Date Created" : "2022-05-06 10:47:31 +0100"
+        }
+      ],
+      "Tags" : [
+
+      ]
+    },
+    {
+      "Date Created" : "2022-05-06 11:41:07 +0100",
+      "Date Modified" : "2022-05-06 11:46:31 +0100",
+      "Folder" : "Hooks",
+      "Title" : "useKeysArePressed",
+      "Fragments" : [
+        {
+          "Content" : "import * as React from 'react';\n\ntype useMultiKeyPressConfig = {\n\tkeys: string[];\n\tcondition?: 'every' | 'some';\n};\n\n\/** Tracks the press status of 0 or more keys. Accepts a config object specifying (1) a required 'keys' array, and (2) an optional 'condition' of either 'every' or 'some' (default). If some, true is returned only if at least one of the keys is pressed. If all, true is returned only if all are pressed. If empty array is passed it returns true.\n * \n * @example\n * \n * const somePressed = useMultiKeyPress({ keys: ['a', 'b'] }) \n * \/\/ => true if 'a' or 'b' is pressed;\n * \n * const allPressed = useMultiKeyPress({keys: ['a', 'b'], condition: 'every'})\n * \/\/ => true if 'a' and 'b' are pressed.\n * \n  *\/\n\nexport const useMultiKeyPress = ({\n\tkeys,\n\tcondition = 'some',\n}: useMultiKeyPressConfig) => {\n\tconst [pressed, setPressed] = React.useState<Set<string>>(new Set());\n\n\tconst downHandler = React.useCallback(\n\t\t({ key }) => {\n\t\t\tpressed.add(key);\n\t\t\tsetPressed(new Set(pressed));\n\t\t},\n\t\t[pressed]\n\t);\n\n\tconst upHandler = React.useCallback(\n\t\t({ key }) => {\n\t\t\tpressed.delete(key);\n\t\t\tsetPressed(new Set(pressed));\n\t\t},\n\t\t[pressed]\n\t);\n\n\tReact.useEffect(() => {\n\t\twindow.addEventListener('keydown', downHandler);\n\t\twindow.addEventListener('keyup', upHandler);\n\t\treturn () => {\n\t\t\twindow.removeEventListener('keydown', downHandler);\n\t\t\twindow.removeEventListener('keyup', upHandler);\n\t\t};\n\t}, [downHandler, upHandler]);\n\n\treturn condition === 'every'\n\t\t? keys.every((key) => pressed.has(key))\n\t\t: keys.some((key) => pressed.has(key));\n};\n\nexport default useMultiKeyPress;\n",
+          "Date Modified" : "2022-05-06 11:41:12 +0100",
+          "Note" : "",
+          "Title" : "Fragment",
+          "Language" : "TypeScript",
+          "Date Created" : "2022-05-06 11:41:07 +0100"
+        }
+      ],
+      "Tags" : [
+
+      ]
+    },
+    {
+      "Date Created" : "2022-05-06 11:44:52 +0100",
+      "Date Modified" : "2022-05-06 11:46:16 +0100",
+      "Folder" : "Hooks",
+      "Title" : "useOnKeyPress",
+      "Fragments" : [
+        {
+          "Content" : "import * as React from 'react';\nimport useMultiKeyPress from '.\/useMultiKeyPress';\n\ntype UseMultiKeyPressArgs = {\n  keys: string[] | string;\n  callBack?: () => unknown;\n};\n\nexport const useOnKeyPress = (\n  keys: UseMultiKeyPressArgs['keys'],\n  callBack: UseMultiKeyPressArgs['callBack']\n) => {\n  const pressed = useMultiKeyPress({\n    keys: Array.isArray(keys) ? keys : [keys],\n  });\n\n  console.log({ pressed });\n\n  React.useEffect(() => {\n    if (pressed) {\n      callBack?.();\n    }\n  }, [pressed]);\n};\n\nexport default useOnKeyPress;\n",
+          "Date Modified" : "2022-05-06 13:03:02 +0100",
+          "Note" : "",
+          "Title" : "Fragment",
+          "Language" : "TypeScript",
+          "Date Created" : "2022-05-06 11:44:52 +0100"
+        }
+      ],
+      "Tags" : [
+
+      ]
+    },
+    {
+      "Date Created" : "2022-05-13 16:09:56 +0100",
+      "Date Modified" : "2022-05-13 16:10:09 +0100",
+      "Folder" : "Components",
+      "Title" : "Function Component",
+      "Fragments" : [
+        {
+          "Content" : "import * as React from 'react'\n\nexport type ${1:ComponentName}Props = {\n\n}\n\nexport const ${1:ComponentName}: React.FC<${1:ComponentName}Props> = (props) => {\n\n  return <><\/>\n}",
+          "Date Modified" : "2022-05-13 16:10:37 +0100",
+          "Note" : "",
+          "Title" : "Fragment",
+          "Language" : "TypeScript",
+          "Date Created" : "2022-05-13 16:09:56 +0100"
+        }
+      ],
+      "Tags" : [
+
+      ]
+    },
+    {
+      "Date Created" : "2022-05-13 16:11:02 +0100",
+      "Date Modified" : "2022-05-13 16:11:09 +0100",
+      "Folder" : "Components",
+      "Title" : "Hook",
+      "Fragments" : [
+        {
+          "Content" : "import * as React from 'react';\n\nexport const use${1:HookName} = ${2:<T>}(${3:args}) => {\n${0}\n}\n\nexport default use${1:HookName};",
+          "Date Modified" : "2022-05-13 16:11:15 +0100",
+          "Note" : "",
+          "Title" : "Fragment",
+          "Language" : "TypeScript",
+          "Date Created" : "2022-05-13 16:11:02 +0100"
+        }
+      ],
+      "Tags" : [
+
+      ]
+    },
+    {
+      "Date Created" : "2022-05-13 16:11:33 +0100",
+      "Date Modified" : "2022-05-13 16:11:37 +0100",
+      "Folder" : "Components",
+      "Title" : "Import Generator",
+      "Fragments" : [
+        {
+          "Content" : "\/\/ @index(['.\/*.{ts,tsx}', '.\/*\/index.{ts,tsx}'], f => `export * from '${f.path.replace(\/\\\/index$\/, '')}'`)",
+          "Date Modified" : "2022-05-13 16:11:44 +0100",
+          "Note" : "",
+          "Title" : "Fragment",
+          "Language" : "TypeScript",
+          "Date Created" : "2022-05-13 16:11:33 +0100"
+        }
+      ],
+      "Tags" : [
+
+      ]
+    }
+  ]
+}
