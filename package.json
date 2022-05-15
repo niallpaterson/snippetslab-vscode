@@ -1,7 +1,10 @@
 {
   "name": "snippetslab",
   "displayName": "SnippetsLab",
+  "repository": "https://github.com/niallpaterson/snippetslab-vscode",
+  "Author": "Niall Paterson",
   "description": "Easily access and paste snippetslab snippets as snippets in vscode.",
+  "license": "MIT",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.67.0"
