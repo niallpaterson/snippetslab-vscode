@@ -4,9 +4,9 @@ import * as vscode from 'vscode';
 import * as transformers from './transformers';
 import type { SnippetLabLib } from './transformers';
 import * as fs from 'fs';
-
+// TODO: add to config and allow update
 const path =
-	'/Users/niallbiglemon/prog/np/snippetslab/src/data/sl-snippets.json';
+	'/Users/niallpaterson1/Library/Mobile Documents/com~apple~CloudDocs/Programming/config/sl-snippets.json';
 
 const fetchSnippets = async () => {
 	try {
